@@ -17,7 +17,8 @@ int main() {
 	for (;;) {
 		switch (getch()) {
 		case '1':
-			//функция - генерация
+			StageGenerate();
+			printf(menu);
 			break;
 		case '2':
 			//функция - сортировка по возрастанию
