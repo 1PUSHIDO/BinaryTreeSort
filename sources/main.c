@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main() {
-	system("chcp 1251"); //изменение кодировки консоли
+	setlocale(LC_ALL, ".UTF8"); //формат кодировки github
 	system("cls");
 
 	char menu[] = "\n\n\tМеню\n\n"
@@ -17,14 +17,19 @@ int main() {
 	for (;;) {
 		switch (getch()) {
 		case '1':
-			StageGenerate();
+			StageGenerate();//генерация массива чисел для входного файла
+			system("cls");
 			printf(menu);
 			break;
 		case '2':
-			//функция - сортировка по возрастанию
+			StageSort(1);//сортировка входного файла по возрастанию для выходного файла
+			system("cls");
+			printf(menu);
 			break;
 		case '3':
-			//функция - сортировка по убыванию
+			StageSort(2);//сортировка входного файла по убыванию для выходного файла
+			system("cls");
+			printf(menu);
 			break;
 		case '4':
 			return 0;//выход из программы
