@@ -7,14 +7,15 @@
 #include <time.h>
 
 typedef char byte;
-struct PARENT //структура узла
+struct PARENT //СЃС‚СЂСѓРєС‚СѓСЂР° СѓР·Р»Р°
 {
 	int value;
 	struct PARENT* left;
 	struct PARENT* right;
 };
-//вспомогательные функции
-byte GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) //генерация данных
+
+//РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ С„СѓРЅРєС†РёРё
+byte GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) //РіРµРЅРµСЂР°С†РёСЏ РґР°РЅРЅС‹С…
 {
 	for (long long i = 0; i != amount; i++) {
 		fprintf(file, "%d\n", range_from + rand() % (range_to - range_from + 1));
@@ -23,7 +24,7 @@ byte GenerateFile(FILE* file, int range_from, int range_to, unsigned long long a
 	return 1;
 }
 //
-//основные функции
+//РѕСЃРЅРѕРІРЅС‹Рµ С„СѓРЅРєС†РёРё
 void StageGenerate() //
 {
 	system("cls");
@@ -31,7 +32,7 @@ void StageGenerate() //
 	int from = 0, to = 0;
 	unsigned long long amount = 0;
 	for (;;) {
-		printf("Введите название файла для сохранения сгенерированных чисел(ex. input): ");
+		printf("Р’РІРµРґРёС‚Рµ РЅР°Р·РІР°РЅРёРµ С„Р°Р№Р»Р° РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЃРіРµРЅРµСЂРёСЂРѕРІР°РЅРЅС‹С… С‡РёСЃРµР»(ex. input): ");
 		tmp = fgets(filename, sizeof(filename), stdin);
 		fseek(stdin, 0, SEEK_END);
 		if (*tmp != '\n')
@@ -41,19 +42,19 @@ void StageGenerate() //
 	tmp = strchr(filename, '\n');
 	strcpy(tmp, ".txt");
 
-	printf("\nВведите количество чисел для генерации: ");
+	printf("\nР’РІРµРґРёС‚Рµ РєРѕР»РёС‡РµСЃС‚РІРѕ С‡РёСЃРµР» РґР»СЏ РіРµРЅРµСЂР°С†РёРё: ");
 	do {
 		(void)scanf("%llu", &amount);
 	} while (amount == 0);
 
-	printf("\nВведите интервал генерирования чисел\n\tОт: ");
+	printf("\nР’РІРµРґРёС‚Рµ РёРЅС‚РµСЂРІР°Р» РіРµРЅРµСЂРёСЂРѕРІР°РЅРёСЏ С‡РёСЃРµР»\n\tРћС‚: ");
 	(void)scanf("%d", &from);
-	printf("\n\tДо: ");
+	printf("\n\tР”Рѕ: ");
 	(void)scanf("%d", &to);
 	
 	FILE* file = fopen(filename, "w");
 	if (!file) {
-		printf("\nНе удалось создать/открыть файл. Нажмите любую клавишу для продолжения...");
+		printf("\nРќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ/РѕС‚РєСЂС‹С‚СЊ С„Р°Р№Р». РќР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ...");
 		_getch();
 		return;
 	}
@@ -62,7 +63,7 @@ void StageGenerate() //
 	time_t stop = clock();
 	double time = (stop - start) / 1000.0;
 
-	printf("\nСгенерировано %llu чисел за %0.3f секунд. Нажмите любую клавишу для продолжения...", amount, time);
+	printf("\nРЎРіРµРЅРµСЂРёСЂРѕРІР°РЅРѕ %llu С‡РёСЃРµР» Р·Р° %0.3f СЃРµРєСѓРЅРґ. РќР°Р¶РјРёС‚Рµ Р»СЋР±СѓСЋ РєР»Р°РІРёС€Сѓ РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ...", amount, time);
 	_getch();
 	system("cls");
 }
