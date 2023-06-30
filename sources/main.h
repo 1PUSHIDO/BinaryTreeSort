@@ -8,35 +8,37 @@
 #include <time.h>
 
 typedef char byte;
+
 struct PARENT //структура узла
 {
 	int value;
 	struct PARENT* left;
 	struct PARENT* right;
 };
+
 //вспомогательные функции
-byte GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) //генерация данных
+void GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) //генерация данных
 {
 	for (long long i = 0; i != amount; i++) {
 		fprintf(file, "%d\n", range_from + rand() % (range_to - range_from + 1)); //запись случайного числа в файл
 	}
-	return 1;
 }
+
 byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count) //преобразование массива данных из файла в двоичное дерево
 {
 	struct PARENT* current = root;
-	if (fscanf(file, "%i,", &(root->value)) <= 0)
+	if (fscanf(file, "%i\n", &(root->value)) <= 0)
 		return 0;
 	int tmp = 0;
-	* count = 1;
-	for (;;) {
+	for (*count = 1;;(*count)++) {
 		if (fscanf(file, "%i\n", &tmp) <= 0)
 			return 1;
-		(* count)++;
 		for (;;) {
 			if (tmp >= current->value) {
 				if (!current->right) {
 					current->right = (struct PARENT*)malloc(sizeof(struct PARENT));
+					if (!current->right)
+						exit(EXIT_FAILURE);
 					current->right->left = NULL; current->right->right = NULL;
 					current->right->value = tmp;
 					current = root;
@@ -48,6 +50,8 @@ byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count)
 			else if (tmp < current->value) {
 				if (!current->left) {
 					current->left = (struct PARENT*)malloc(sizeof(struct PARENT));
+					if (!current->left)
+						exit(EXIT_FAILURE);
 					current->left->left = NULL; current->left->right = NULL;
 					current->left->value = tmp;
 					current = root;
@@ -59,6 +63,7 @@ byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count)
 		}
 	}
 }
+
 void BinarySortOutput(struct PARENT* root, FILE* file, byte type) //бинарная сортировка, вывод в выходной файл
 {
 	if (!root)
@@ -79,7 +84,7 @@ void BinarySortOutput(struct PARENT* root, FILE* file, byte type) //бинарн
 void StageGenerate() //функция меню - генерация массива чисел для входного файла
 {
 	system("cls");
-	char filename[260] = "", *tmp;
+	char filename[260] = "", * tmp;
 	int from = 0, to = 0;
 	unsigned long long amount = 0;
 	for (;;) {
@@ -93,16 +98,18 @@ void StageGenerate() //функция меню - генерация массив
 	tmp = strchr(filename, '\n');
 	strcpy(tmp, ".txt");
 
-	printf("\nВведите количество чисел для генерации: ");
 	do {
+		printf("\nВведите количество чисел для генерации: ");
 		(void)scanf("%llu", &amount);
 	} while (amount == 0);
 
-	printf("\nВведите интервал генерирования чисел\n\tОт: ");
-	(void)scanf("%d", &from);
-	printf("\n\tДо: ");
-	(void)scanf("%d", &to);
-	
+	do {
+		printf("\nВведите интервал генерирования чисел\n\tОт: ");
+		(void)scanf("%d", &from);
+		printf("\tДо: ");
+		(void)scanf("%d", &to);
+	} while (from>to);
+
 	FILE* file = fopen(filename, "w");
 	if (!file) {
 		printf("\nНе удалось создать/открыть файл. Нажмите любую клавишу для продолжения...");
@@ -118,6 +125,7 @@ void StageGenerate() //функция меню - генерация массив
 	printf("\nСгенерировано %llu чисел за %0.3f секунд. Нажмите любую клавишу для продолжения...", amount, time);
 	(void)_getch();
 }
+
 void StageSort(byte type) //пункт меню - сортировка массива чисел входного файла для выходного файла
 {
 	system("cls");
@@ -158,21 +166,25 @@ void StageSort(byte type) //пункт меню - сортировка масс�
 		(void)_getch();
 		return;
 	}
-	
+
 	time_t start = clock();
-	
+
 	struct PARENT* root = (struct PARENT*)malloc(sizeof(struct PARENT));
+	if (!root)
+		exit(EXIT_FAILURE);
 	root->left = NULL; root->right = NULL;
 	if (!FileToTreeInput(file_input, root, &count)) {
 		_fcloseall();
 		printf("\nСлишком мало чисел для сортировки. Нажмите любую клавишу для продолжения...");
 		(void)_getch();
+		return;
 	}
 	BinarySortOutput(root, file_output, type);
 	_fcloseall();
-	
+
 	time_t stop = clock();
 	double time = (stop - start) / 1000.0;
-	printf("\nСортировка по %s: обработано %llu чисел за %0.3f секунд. Нажмите любую клавишу для продолжения...", type == 0 ? "возрастанию" : "убыванию", count, time);
+
+	printf("\nСортировка по %s: обработано %llu чисел за %0.3f секунд. Нажмите любую клавишу для продолжения...", !type ? "возрастанию" : "убыванию", count, time);
 	(void)_getch();
 }

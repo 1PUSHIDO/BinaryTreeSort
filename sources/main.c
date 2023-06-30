@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main() {
-	setlocale(LC_ALL, ".UTF8"); //формат кодировки github
+	setlocale(LC_ALL, ".UTF8");//формат кодировки github
 	system("cls");
 
 	char menu[] = "\n\n\tМеню\n\n"
@@ -22,12 +22,12 @@ int main() {
 			printf(menu);
 			break;
 		case '2':
-			StageSort(1);//сортировка входного файла по возрастанию для выходного файла
+			StageSort(0);//сортировка входного файла по возрастанию для выходного файла
 			system("cls");
 			printf(menu);
 			break;
 		case '3':
-			StageSort(2);//сортировка входного файла по убыванию для выходного файла
+			StageSort(1);//сортировка входного файла по убыванию для выходного файла
 			system("cls");
 			printf(menu);
 			break;
