@@ -9,7 +9,8 @@
 
 typedef char byte;
 
-struct PARENT //структура узла
+//структура узла
+struct PARENT 
 {
 	int value;
 	struct PARENT* left;
@@ -17,14 +18,15 @@ struct PARENT //структура узла
 };
 
 //вспомогательные функции
-void GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) //генерация данных
+//генерация данных
+void GenerateFile(FILE* file, int range_from, int range_to, unsigned long long amount) 
 {
 	for (long long i = 0; i != amount; i++) {
-		fprintf(file, "%d\n", range_from + rand() % (range_to - range_from + 1)); //запись случайного числа в файл
+		fprintf(file, "%d\n", range_from + rand() % (range_to - range_from + 1));
 	}
 }
-
-byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count) //преобразование массива данных из файла в двоичное дерево
+//преобразование массива данных из файла в двоичное дерево
+byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count) 
 {
 	struct PARENT* current = root;
 	if (fscanf(file, "%i\n", &(root->value)) <= 0)
@@ -63,8 +65,8 @@ byte FileToTreeInput(FILE* file, struct PARENT* root, unsigned long long* count)
 		}
 	}
 }
-
-void BinarySortOutput(struct PARENT* root, FILE* file, byte type) //бинарная сортировка, вывод в выходной файл
+//бинарная сортировка, вывод в выходной файл
+void BinarySortOutput(struct PARENT* root, FILE* file, byte type) 
 {
 	if (!root)
 		return;
@@ -78,10 +80,12 @@ void BinarySortOutput(struct PARENT* root, FILE* file, byte type) //бинарн
 		fprintf(file, "%d\n", root->value);
 		BinarySortOutput(root->left, file, type);
 	}
+	free(root);
 }
 
 //основные функции
-void StageGenerate() //функция меню - генерация массива чисел для входного файла
+//функция меню - генерация массива чисел для входного файла
+void StageGenerate()
 {
 	system("cls");
 	char filename[260] = "", * tmp;
@@ -125,8 +129,8 @@ void StageGenerate() //функция меню - генерация массив
 	printf("\nСгенерировано %llu чисел за %0.3f секунд. Нажмите любую клавишу для продолжения...", amount, time);
 	(void)_getch();
 }
-
-void StageSort(byte type) //пункт меню - сортировка массива чисел входного файла для выходного файла
+//пункт меню - сортировка массива чисел входного файла для выходного файла
+void StageSort(byte type) 
 {
 	system("cls");
 	char filename_input[260] = "", filename_output[260] = "", * tmp;
@@ -175,6 +179,8 @@ void StageSort(byte type) //пункт меню - сортировка масс�
 	root->left = NULL; root->right = NULL;
 	if (!FileToTreeInput(file_input, root, &count)) {
 		_fcloseall();
+		free(root);
+		remove(filename_output);
 		printf("\nСлишком мало чисел для сортировки. Нажмите любую клавишу для продолжения...");
 		(void)_getch();
 		return;

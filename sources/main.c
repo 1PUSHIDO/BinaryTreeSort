@@ -1,7 +1,8 @@
 #include "main.h"
 
 int main() {
-	setlocale(LC_ALL, ".UTF8");//формат кодировки github
+	//формат кодировки github
+	setlocale(LC_ALL, ".UTF8");
 	system("cls");
 
 	char menu[] = "\n\n\tМеню\n\n"
@@ -17,22 +18,26 @@ int main() {
 	for (;;) {
 		switch (getch()) {
 		case '1':
-			StageGenerate();//генерация массива чисел для входного файла
+			//генерация массива чисел для входного файла
+			StageGenerate();
 			system("cls");
 			printf(menu);
 			break;
 		case '2':
-			StageSort(1);//сортировка входного файла по возрастанию для выходного файла
+			//сортировка входного файла по возрастанию для выходного файла
+			StageSort(1);
 			system("cls");
 			printf(menu);
 			break;
 		case '3':
-			StageSort(2);//сортировка входного файла по убыванию для выходного файла
+			//сортировка входного файла по убыванию для выходного файла
+			StageSort(2);
 			system("cls");
 			printf(menu);
 			break;
 		case '4':
-			return 0;//выход из программы
+			//выход из программы
+			return 0;
 			break;
 		}
 	}
